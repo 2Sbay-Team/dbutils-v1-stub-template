@@ -2,33 +2,27 @@ name: Build Stub Jar
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Scala
-        uses: olafurpg/setup-scala@v12
+        uses: olafurpg/setup-scala@v13
         with:
-          java-version: adopt@1.11
-
-      - name: Cache sbt
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.sbt
-          key: ${{ runner.os }}-sbt
+          scala-version: 2.12.20
 
       - name: Run sbt package
-        run: sbt package
+        run: sbt clean package
 
-      - name: Upload jar
-        uses: actions/upload-artifact@v3
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
         with:
           name: dbutils-v1-stub
           path: target/scala-2.12/*.jar
